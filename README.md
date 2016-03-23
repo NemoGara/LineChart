@@ -1,3 +1,6 @@
 # LineChart
-polyline chart 静态折线图，不能缩放。
+polyline chart 折线图
 
+静态，不能缩放。仿照余额宝的折线图绘制。
+
+http://github.com/NemoGara/LineChart/raw/master/img/show.png
