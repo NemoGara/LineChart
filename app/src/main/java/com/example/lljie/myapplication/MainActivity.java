@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         //设置这个图形的左上角坐标
         lineChart.setStartPoint(new Point(130, 350));
         //y轴
-        lineChart.setyArr(new int[]{1000, 2000, 3000, 4000, 5000});
+        lineChart.setyArr(new int[]{0,1000, 2000, 3000, 4000, 5000});
         lineChart.setxArr(new String[]{"03-01", "03-06", "03-06", "03-06", "03-07"});
         //背景条形颜色
         lineChart.setBarColor(Color.argb(90, 204, 232, 207));

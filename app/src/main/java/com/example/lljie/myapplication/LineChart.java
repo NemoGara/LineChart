@@ -175,7 +175,7 @@ public class LineChart extends View {
 
 
         //画横线
-        int yLineNum = yArr.length + 1;//y轴分格格数=y轴参数数量+1
+        int yLineNum = yArr.length ;//y轴分格格数
         float itemYLength = yLength / yLineNum;//每格宽度
         //末端多余的线  xRmargin
         for (int i = 1; i < yArr.length + 1; i++) {
@@ -212,10 +212,11 @@ public class LineChart extends View {
         }
 
         //画y轴文字
-        for (int i = 1; i < yArr.length + 1; i++) {
+        for (int i = 0; i < yArr.length ; i++) {
             //测量字符串长度
-            float textLength = paintText.measureText(String.valueOf(yArr[i - 1]));
-            canvas.drawText(String.valueOf(yArr[i - 1]), startPoint.x - textLength - (textLength / 2), originPoint.y - (itemYLength * i) + (textSize / 2), paintText);
+            float normalTextLength = paintText.measureText(String.valueOf(yArr[yArr.length-1]));//最后一个元素一般最长，设为一般长度
+            float perTextLength = paintText.measureText(String.valueOf(yArr[i]));//每个元素长度
+            canvas.drawText(String.valueOf(yArr[i]), startPoint.x - perTextLength - (normalTextLength / 2), originPoint.y - (itemYLength * i) + (textSize / 2), paintText);
         }
 
         //画折线
@@ -229,14 +230,23 @@ public class LineChart extends View {
             float Y = perY * dataArr[i];//数据的实际长度
             //终点
             float nextY = perY * dataArr[i + 1];
-            canvas.drawLine(originPoint.x + (itemXLength * i), originPoint.y - Y, originPoint.x + (itemXLength * (i + 1)), originPoint.y - nextY, linePaint);//y轴
+
+            //终点x的坐标值
+            Float nextXPosition = originPoint.x + (itemXLength * (i + 1));
+            //终点y的坐标值
+            Float nextYPosition = originPoint.y - nextY;
+
+            canvas.drawLine(originPoint.x + (itemXLength * i), originPoint.y - Y, nextXPosition, nextYPosition, linePaint);//y轴
+
+
+
 
             if (i == dataArr.length - 2) {
-                canvas.drawCircle(originPoint.x + (itemXLength * (i + 1)), originPoint.y - nextY, 15, linePaint);
+                canvas.drawCircle(nextXPosition, nextYPosition, 15, linePaint);
                 //画个白色圆形
                 Paint circlePaint = new Paint();
                 circlePaint.setColor(Color.WHITE);
-                canvas.drawCircle(originPoint.x + (itemXLength * (i + 1)), originPoint.y - nextY, 8, circlePaint);
+                canvas.drawCircle(nextXPosition, nextYPosition, 8, circlePaint);
 
                 Paint textPaint = new Paint();
                 textPaint.setColor(Color.WHITE);
@@ -244,12 +254,12 @@ public class LineChart extends View {
 
                 float textLength = textPaint.measureText(String.valueOf(dataArr[i + 1]));
                 float padding = 10;
-                RectF rectF = new RectF(originPoint.x + (itemXLength * (i + 1)) - (textLength / 2) - padding, originPoint.y - nextY - textSize - textSize - padding, originPoint.x + (itemXLength * (i + 1)) + (textLength / 2) + padding, originPoint.y - nextY - textSize + padding);
+                RectF rectF = new RectF(nextXPosition - (textLength / 2) - padding, nextYPosition - textSize - textSize - padding, nextXPosition + (textLength / 2) + padding, nextYPosition - textSize + padding);
                 canvas.drawRoundRect(rectF, 15, 15, linePaint);
-//              canvas.drawRect(originPoint.x + (itemXLength * (i + 1)) - (textLength / 2) - padding, originPoint.y - nextY - textSize - textSize - padding, originPoint.x + (itemXLength * (i + 1)) + (textLength / 2) + padding, originPoint.y - nextY - textSize + padding, linePaint);
+//              canvas.drawRect(nextXPosition - (textLength / 2) - padding, nextYPosition - textSize - textSize - padding, nextXPosition + (textLength / 2) + padding, nextYPosition - textSize + padding, linePaint);
 
                 //结束点的文字（白色）
-                canvas.drawText(String.valueOf(dataArr[i + 1]), originPoint.x + (itemXLength * (i + 1)) - (textLength / 2), originPoint.y - nextY - textSize - padding, textPaint);
+                canvas.drawText(String.valueOf(dataArr[i + 1]), nextXPosition - (textLength / 2), nextYPosition - textSize - padding, textPaint);
 
             }
         }
