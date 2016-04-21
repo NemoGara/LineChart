@@ -11,6 +11,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.text.DecimalFormat;
+
 /**
  * Author: LiLinjie
  * Date: 2016-03-21
@@ -35,8 +37,16 @@ public class LineChart extends View {
         this.yArr = yArr;
     }
 
+    public int[] getyArr() {
+        return yArr;
+    }
+
     public void setxArr(String[] xArr) {
         this.xArr = xArr;
+    }
+
+    public String[] getxArr() {
+        return xArr;
     }
 
     private int xLength;
@@ -88,10 +98,14 @@ public class LineChart extends View {
         this.textColor = textColor;
     }
 
-    private int[] dataArr;
+    private double[] dataArr;
 
-    public void setDataArr(int[] dataArr) {
+    public void setDataArr(double[] dataArr) {
         this.dataArr = dataArr;
+    }
+
+    public double[] getDataArr() {
+        return dataArr;
     }
 
     //文字大小
@@ -227,9 +241,9 @@ public class LineChart extends View {
             int itemNum = yArr[1] - yArr[0];//y轴一格代表的数值
             float perY = itemYLength / itemNum;//按数值，细分每格
             //起点
-            float Y = perY * dataArr[i];//数据的实际长度
+            float Y = perY * (float)dataArr[i];//数据的实际长度
             //终点
-            float nextY = perY * dataArr[i + 1];
+            float nextY = perY * (float)dataArr[i + 1];
 
             //终点x的坐标值
             Float nextXPosition = originPoint.x + (itemXLength * (i + 1));
@@ -252,14 +266,18 @@ public class LineChart extends View {
                 textPaint.setColor(Color.WHITE);
                 textPaint.setTextSize(textSize);
 
-                float textLength = textPaint.measureText(String.valueOf(dataArr[i + 1]));
+                //转0.00格式
+                String lastDataNum=new DecimalFormat("#.00").format(dataArr[i + 1]);
+
+                float textLength = textPaint.measureText(lastDataNum);
                 float padding = 10;
                 RectF rectF = new RectF(nextXPosition - (textLength / 2) - padding, nextYPosition - textSize - textSize - padding, nextXPosition + (textLength / 2) + padding, nextYPosition - textSize + padding);
                 canvas.drawRoundRect(rectF, 15, 15, linePaint);
 //              canvas.drawRect(nextXPosition - (textLength / 2) - padding, nextYPosition - textSize - textSize - padding, nextXPosition + (textLength / 2) + padding, nextYPosition - textSize + padding, linePaint);
 
+
                 //结束点的文字（白色）
-                canvas.drawText(String.valueOf(dataArr[i + 1]), nextXPosition - (textLength / 2), nextYPosition - textSize - padding, textPaint);
+                canvas.drawText(lastDataNum, nextXPosition - (textLength / 2), nextYPosition - textSize - padding, textPaint);
 
             }
         }
