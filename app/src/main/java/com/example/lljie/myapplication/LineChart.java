@@ -198,7 +198,7 @@ public class LineChart extends View {
 
 
         //画竖线
-        int xLineNum = xArr.length - 1;//x轴分格格数=x轴参数数量+1
+        int xLineNum = xArr.length;//x轴分格格数
         float itemXLength = xLength / xLineNum;//每格宽度
         for (int i = 0; i < xArr.length; i++) {
             canvas.drawLine(originPoint.x + (itemXLength * i), startPoint.y, originPoint.x + (itemXLength * i), originPoint.y, paint);//y轴
